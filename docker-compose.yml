@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   bedrock-access-gateway:
     image: ghcr.io/aaronbolton/bedrock-access-gateway:latest
@@ -9,4 +7,4 @@ services:
     ports:
       - "80:80"
     environment:
-      - ENV_VAR_NAME=env_var_value
+      - DEFAULT_API_KEYS=bedrock
