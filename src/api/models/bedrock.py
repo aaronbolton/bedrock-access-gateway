@@ -42,7 +42,7 @@ from api.setting import DEBUG, AWS_REGION, ENABLE_CROSS_REGION_INFERENCE, DEFAUL
 
 logger = logging.getLogger(__name__)
 
-config = Config(connect_timeout=1, read_timeout=120, retries={"max_attempts": 1})
+config = Config(connect_timeout=60, read_timeout=120, retries={"max_attempts": 1})
 
 bedrock_runtime = boto3.client(
     service_name="bedrock-runtime",
@@ -407,6 +407,12 @@ class BedrockModel(BaseChatModel):
             "maxTokens": chat_request.max_tokens,
             "topP": chat_request.top_p,
         }
+
+        if chat_request.stop is not None:
+            stop = chat_request.stop
+            if isinstance(stop, str):
+                stop = [stop]
+            inference_config["stopSequences"] = stop
 
         args = {
             "modelId": chat_request.model,
